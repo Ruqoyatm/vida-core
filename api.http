@@ -14,5 +14,14 @@ Content-Type: application/json
 
 {
   "email": "kabir@rogue.com",
-  "password": "secret"
+  "password": "secret123"
+}
+
+### Login - wrong password
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "email": "kabir@rogue.com",
+    "password": "wrong"
 }

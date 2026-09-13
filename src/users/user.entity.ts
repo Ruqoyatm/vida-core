@@ -44,6 +44,9 @@ export class User {
   @Column({ type: 'timestamp', nullable: true })
   lastLoginAt: Date | null;
 
+  @Column({ type: 'varchar', nullable: true })
+department: string | null;
+
   @CreateDateColumn()
   createdAt: Date;
 
