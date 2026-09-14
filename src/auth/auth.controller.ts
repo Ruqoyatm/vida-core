@@ -15,8 +15,8 @@ register(
   return this.authService.register(body.email, body.password, body.fullName);
 }
   @Post('login')
-  login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  login(@Body() body: { identifier: string; password: string }) {
+    return this.authService.login(body.identifier, body.password);
   }
 
   @UseGuards(JwtAuthGuard)

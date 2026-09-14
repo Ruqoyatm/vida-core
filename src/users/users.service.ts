@@ -11,7 +11,13 @@ export class UsersService {
   ) {}
 
   findByEmail(email: string) {
-    return this.usersRepository.findOne({ where: { email } });
+  return this.usersRepository.findOne({ where: { email } });
+}
+
+  findByEmailOrStaffNumber(identifier: string) {
+  return this.usersRepository.findOne({
+    where: [{ email: identifier }, { staffNumber: identifier }],
+  });
   }
 
   findById(id: string) {
@@ -20,6 +26,10 @@ export class UsersService {
 
   async create(email: string, passwordHash: string, fullName: string) {
     const user = this.usersRepository.create({ email, passwordHash, fullName });
+    return this.usersRepository.save(user);
+  }
+
+  save(user: User) {
     return this.usersRepository.save(user);
   }
 }

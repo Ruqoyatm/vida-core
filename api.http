@@ -8,15 +8,22 @@ Content-Type: application/json
   "fullName": "Mohammed Kabir Kayode"
 }
 
-
 ### Login
-
-#@name login
+# @name login
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "kabir@rogue.com",
+  "identifier": "kabir@rogue.com",
+  "password": "secret123"
+}
+
+### Login with staff ID
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "EMP001",
   "password": "secret123"
 }
 
@@ -25,8 +32,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "kabir@rogue.com",
-    "password": "wrong"
+  "identifier": "kabir@rogue.com",
+  "password": "wrong"
 }
 
 ### Me - no token

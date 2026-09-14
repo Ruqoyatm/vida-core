@@ -15,6 +15,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({ type: 'varchar', unique: true, nullable: true })
+  staffNumber: string | null;
+
   @Column()
   passwordHash: string;
 
@@ -28,6 +31,9 @@ export class User {
     default: [UserRole.RECEPTIONIST],
   })
   roles: UserRole[];
+
+  @Column({ type: 'varchar', nullable: true })
+  department: string | null;
 
   @Column({ default: true })
   isActive: boolean;
@@ -43,9 +49,6 @@ export class User {
 
   @Column({ type: 'timestamp', nullable: true })
   lastLoginAt: Date | null;
-
-  @Column({ type: 'varchar', nullable: true })
-department: string | null;
 
   @CreateDateColumn()
   createdAt: Date;
