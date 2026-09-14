@@ -48,6 +48,8 @@ export class AuthService {
       department: user.department,
     });
 
-    return { access_token: token };
-  }
+    return { 
+      access_token: token, 
+      mustChangePassword: user.mustChangePassword,};
+  };
 }

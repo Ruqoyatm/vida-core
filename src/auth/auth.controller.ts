@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { Request } from 'express';
 import { AuthService } from './auth.service.js';
-import { JwtAuthGuard, AuthenticatedRequest } from './jwt-auth.guard.js';
+import { JwtAuthGuard,  type AuthenticatedRequest } from './jwt-auth.guard.js';
+import { RolesGuard } from './roles.guard.js';
+import { Roles } from './roles.decorator.js';
+import { UserRole } from '../users/user-role.enum.js';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -22,4 +24,11 @@ register(
   me(@Req() req: AuthenticatedRequest) {
     return req.user;
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN)
+@Get('admin-only')
+adminOnly() {
+  return { message: 'Only an admin can see this' };
+}
 }
