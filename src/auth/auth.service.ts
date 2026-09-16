@@ -76,4 +76,21 @@ export class AuthService {
       mustChangePassword: user.mustChangePassword,
     };
   }
+    async getProfile(userId: string) {
+    const user = await this.usersService.findById(userId);
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('Account is no longer active');
+    }
+
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      staffNumber: user.staffNumber,
+      roles: user.roles,
+      department: user.department,
+      mustChangePassword: user.mustChangePassword,
+    };
+  }
 }

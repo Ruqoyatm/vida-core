@@ -8,6 +8,26 @@ Content-Type: application/json
   "fullName": "Mohammed Kabir Kayode"
 }
 
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@vidacore.com",
+  "password": "Vidacore123",
+  "fullName": "Bambina Blessing"
+}
+
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "lahobambi@rogue.com",
+  "password": "loverbirds",
+  "fullName": "laho bambina"
+}
+
 ### Login
 # @name login
 POST http://localhost:3000/auth/login
@@ -16,6 +36,26 @@ Content-Type: application/json
 {
   "identifier": "kabir@rogue.com",
   "password": "secret123"
+}
+
+### Login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "tife223@gmail.com",
+  "password": "12346"
+}
+
+### Login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "lahobambi@rogue.com",
+  "password": "loverbirds"
 }
 
 ### Login with staff ID
@@ -36,13 +76,10 @@ Content-Type: application/json
   "password": "wrong"
 }
 
-### Me - no token
+### Me - with cookie
 GET http://localhost:3000/auth/me
 
 ### Me - tampered token
 GET http://localhost:3000/auth/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.XXXXX.YYYYY
 
-### Me - with token
-GET http://localhost:3000/auth/me
-Authorization: Bearer {{login.response.body.access_token}}
