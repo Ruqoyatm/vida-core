@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PatientsModule } from './patients/patients.module.js';
+import { EncountersModule } from './encounters/encounters.module.js';
+import { VitalsModule } from './vitals/vitals.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -25,6 +27,8 @@ import { PatientsModule } from './patients/patients.module.js';
     UsersModule,
     AuthModule,
     PatientsModule,
+    EncountersModule,
+    VitalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

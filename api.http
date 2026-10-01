@@ -28,6 +28,31 @@ Content-Type: application/json
   "fullName": "laho bambina"
 }
 
+### Create patient
+POST http://localhost:3000/patients
+Content-Type: application/json
+
+{
+  "surname": "Nwosu",
+  "firstName": "Amaka",
+  "dateOfBirth": "1996-04-12",
+  "sex": "female",
+  "maritalStatus": "married",
+  "phone": "08031234567"
+}
+### Create patient
+POST http://localhost:3000/patients
+Content-Type: application/json
+
+{
+  "surname": "Nwosu",
+  "firstName": "Amaka",
+  "dateOfBirth": "1996-04-12",
+  "sex": "female",
+  "maritalStatus": "married",
+  "phone": "08031234567"
+}
+
 ### Login
 # @name login
 POST http://localhost:3000/auth/login
@@ -83,3 +108,132 @@ GET http://localhost:3000/auth/me
 GET http://localhost:3000/auth/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.XXXXX.YYYYY
 
+### Search by name
+GET http://localhost:3000/patients?q=amaka
+
+### Search by hospital number
+GET http://localhost:3000/patients?q=VC-0000
+
+### Search by phone
+GET http://localhost:3000/patients?q=0803
+
+### Search - no match
+GET http://localhost:3000/patients?q=zzzzz
+
+### Search - too short
+GET http://localhost:3000/patients?q=a
+
+### Logout
+POST http://localhost:3000/auth/logout
+
+### Register 
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "farislawal@gmail.com",
+  "password": "lawal",
+  "fullName": "Faris Lawal"
+}
+
+### Login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "farislawal@gmail.com",
+  "password": "lawal"
+}
+
+### Register a patient
+POST http://localhost:3000/patients
+Content-Type: application/json
+
+{
+  "surname": "Salam",
+  "firstName": "Mohammed",
+  "dateOfBirth": "1990-04-21",
+  "sex": "female",
+  "phone": "08033352255"
+}
+
+### Check in
+POST http://localhost:3000/visits
+Content-Type: application/json
+
+{
+  "hospitalNo": "VC-000001",
+  "visitType": "new",
+  "department": "gopd",
+  "presentingComplaint": "Headache for three days",
+  "priority": "routine"
+}
+
+### Today's queue 
+GET http://localhost:3000/visits/today
+
+### Queue for one department
+GET http://localhost:3000/visits/today?department=gopd
+
+### Record vitals
+POST http://localhost:3000/vitals
+Content-Type: application/json
+
+{
+  "visitId": "PUT-YOUR-VISIT-ID-HERE",
+  "systolic": 158,
+  "diastolic": 96,
+  "pulse": 84,
+  "respiratoryRate": 18,
+  "temperature": 37.5,
+  "weight": 68.5,
+  "height": 165
+}
+
+### GET
+GET http://localhost:3000/visits/today
+
+### Register
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "Balala@gmail.com",
+  "password": "balala@123",
+  "fullName": "Balala Idris Muhammed"
+}
+
+### Today's queue
+GET http://localhost:3000/encounters/today
+
+### Doctor writes the history
+PATCH http://localhost:3000/encounters/PASTE_ID_HERE/history
+Content-Type: application/json
+
+{
+  "historyOfPresentingComplaint": "Headache for four days, worse in the mornings. No visual disturbance.",
+  "pastMedicalHistory": "Hypertension, diagnosed 2023. No known surgeries.",
+  "examinationFindings": "Alert and oriented. Chest clear. BP elevated on repeat."
+}
+
+### Check in a patient
+POST http://localhost:3000/encounters
+Content-Type: application/json
+
+{
+  "hospitalNo": "VC-000001",
+  "department": "gopd",
+  "presentingComplaint": "Headache and dizziness",
+  "priority": "routine"
+}
+
+### Doctor writes the history
+PATCH http://localhost:3000/encounters/76b165e5-3132-483f-9447-311dde218155/history
+Content-Type: application/json
+
+{
+  "historyOfPresentingComplaint": "Headache for four days, worse in the mornings. No visual disturbance.",
+  "pastMedicalHistory": "Hypertension, diagnosed 2023. No known surgeries.",
+  "examinationFindings": "Alert and oriented. Chest clear. BP elevated on repeat."
+}
