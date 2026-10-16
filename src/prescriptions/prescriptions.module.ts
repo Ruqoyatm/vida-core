@@ -8,6 +8,7 @@ import { Encounter } from '../encounters/encounter.entity.js';
 import { PrescriptionsService } from './prescriptions.service.js';
 import { PrescriptionsController } from './prescriptions.controller.js';
 import { PharmacyController } from './pharmacy.controller.js';
+import { AuditModule } from '../audit/audit.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PharmacyController } from './pharmacy.controller.js';
       Encounter,
     ]),
     AuthModule,
+    AuditModule,
   ],
   controllers: [PrescriptionsController, PharmacyController],
   providers: [PrescriptionsService],

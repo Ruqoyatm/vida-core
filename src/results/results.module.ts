@@ -9,7 +9,7 @@ import { ResultsService } from './results.service.js';
 import { ResultsController } from './results.controller.js';
 import { ReportsController } from './reports.controller.js';
 import { VerificationController } from './verification.controller.js';
-import { InboxController } from './indox.controller.js';
+import { InboxController } from './inbox.controller.js';
 import { AuditModule } from '../audit/audit.module.js';
 
 @Module({

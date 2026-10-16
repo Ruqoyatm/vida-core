@@ -11,6 +11,7 @@ import { Product } from '../products/product.entity.js';
 import { Encounter } from '../encounters/encounter.entity.js';
 import { PrescriptionStatus } from './prescription-status.enum.js';
 import { DrugRoute } from './drug-route.enum.js';
+import { AuditService } from '../audit/audit.service.js';
 
 @Injectable()
 export class PrescriptionsService {
@@ -23,6 +24,7 @@ export class PrescriptionsService {
     private productsRepository: Repository<Product>,
     @InjectRepository(Encounter)
     private encountersRepository: Repository<Encounter>,
+    private auditService: AuditService,
   ) {}
 
   private blockedByAllergy(allergies: string | null, product: Product) {
@@ -121,6 +123,17 @@ export class PrescriptionsService {
 
     await this.itemsRepository.save(items);
 
+    await this.auditService.record({
+      userId: doctorId,
+      action: 'prescription_created',
+      entity: 'prescription',
+      entityId: saved.id,
+      patientId: encounter.patientId,
+      before: null,
+      after: { items: items.map((item) => item.drugName) },
+      reason: null,
+    });
+
     return this.prescriptionsRepository.findOne({
       where: { id: saved.id },
       relations: { items: true },
@@ -203,7 +216,7 @@ export class PrescriptionsService {
   ) {
     const prescription = await this.prescriptionsRepository.findOne({
       where: { id },
-      relations: { items: true },
+      relations: { items: true, encounter: true },
     });
 
     if (!prescription) {
@@ -236,11 +249,15 @@ export class PrescriptionsService {
       }
     }
 
+    const dispensed: string[] = [];
+
     for (const entry of entries) {
       const item = prescription.items.find((i) => i.id === entry.itemId)!;
 
       item.dispensedQuantity = item.dispensedQuantity + entry.quantity;
       await this.itemsRepository.save(item);
+
+      dispensed.push(item.drugName + ' x' + entry.quantity);
     }
 
     const fresh = await this.itemsRepository.find({
@@ -258,6 +275,17 @@ export class PrescriptionsService {
     prescription.dispensedAt = new Date();
 
     await this.prescriptionsRepository.save(prescription);
+
+    await this.auditService.record({
+      userId: pharmacistId,
+      action: 'prescription_dispensed',
+      entity: 'prescription',
+      entityId: prescription.id,
+      patientId: prescription.encounter.patientId,
+      before: null,
+      after: { items: dispensed, status: prescription.status },
+      reason: null,
+    });
 
     return this.findOneForDispense(id);
   }

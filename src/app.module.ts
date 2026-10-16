@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 import { RedactInterceptor } from './common/redact.interceptor.js';
 import { UsersModule } from './users/users.module.js';
 import { AuthModule } from './auth/auth.module.js';
@@ -55,9 +53,7 @@ import { AdminModule } from './admin/admin.module.js';
     AuditModule,
     AdminModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService,
     {
       provide: APP_INTERCEPTOR,
       useClass: RedactInterceptor,
