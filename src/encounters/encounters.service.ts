@@ -154,4 +154,20 @@ export class EncountersService {
 
     return this.encountersRepository.save(encounter);
   }
+
+  async setStatus(id: string, status: EncounterStatus) {
+    const encounter = await this.findById(id);
+
+    if (encounter.status === EncounterStatus.COMPLETED) {
+      throw new ConflictException('This visit is already closed');
+    }
+
+    encounter.status = status;
+
+    if (status === EncounterStatus.COMPLETED) {
+      encounter.completedAt = new Date();
+    }
+
+    return this.encountersRepository.save(encounter);
+  }
 }

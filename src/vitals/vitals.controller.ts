@@ -1,20 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
-import { JwtAuthGuard, type AuthenticatedRequest } from '../auth/jwt-auth.guard.js';
+import { Body, Controller, Get, Post, Query, Req } from '@nestjs/common';
+import { type AuthenticatedRequest } from '../auth/jwt-auth.guard.js';
+import { RequirePermission } from '../auth/permissions.decorator.js';
 import { VitalsService } from './vitals.service.js';
 
 @Controller('vitals')
-@UseGuards(JwtAuthGuard)
 export class VitalsController {
   constructor(private vitalsService: VitalsService) {}
 
+  @RequirePermission('clinical_notes')
   @Post()
   create(
     @Body()
@@ -33,6 +26,7 @@ export class VitalsController {
     return this.vitalsService.create(body, req.user.sub);
   }
 
+  @RequirePermission('view_patient')
   @Get()
   findByEncounter(@Query('encounterId') encounterId: string) {
     return this.vitalsService.findByEncounter(encounterId);

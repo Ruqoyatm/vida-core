@@ -1,15 +1,15 @@
-import { Body, Controller, Get, Post, Req, UseGuards, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service.js';
-import { JwtAuthGuard, type AuthenticatedRequest } from './jwt-auth.guard.js';
-import { RolesGuard } from './roles.guard.js';
-import { Roles } from './roles.decorator.js';
-import { UserRole } from '../users/user-role.enum.js';
+import { type AuthenticatedRequest } from './jwt-auth.guard.js';
+import { RequirePermission } from './permissions.decorator.js';
 import type { Response } from 'express';
+import { Public } from './public.decorator.js';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('register')
   register(
     @Body() body: { email: string; password: string; fullName: string },
@@ -17,6 +17,7 @@ export class AuthController {
     return this.authService.register(body.email, body.password, body.fullName);
   }
 
+  @Public()
   @Post('login')
   async login(
     @Body() body: { identifier: string; password: string },
@@ -35,6 +36,7 @@ export class AuthController {
     return { mustChangePassword: result.mustChangePassword };
   }
 
+  @Public()
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('access_token', {
@@ -47,14 +49,12 @@ export class AuthController {
     return { ok: true };
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
   me(@Req() req: AuthenticatedRequest) {
     return this.authService.getProfile(req.user.sub);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @RequirePermission('manage_users')
   @Get('admin-only')
   adminOnly() {
     return { message: 'Only an admin can see this' };

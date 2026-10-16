@@ -27,7 +27,7 @@ export class Patient {
   otherNames: string | null;
 
   @Column({ type: 'date' })
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
   @Column({ type: 'enum', enum: PatientSex })
   sex: PatientSex;
@@ -57,9 +57,9 @@ export class Patient {
   payerRef: string | null;
 
   @Column({ type: 'date', nullable: true })
-  coverExpiry: Date | null;
+  coverExpiry: string | null;
 
-  @Column({ type: 'varchar', nullable: true })
+  @Column({ type: 'text', nullable: true })
   knownAllergies: string | null;
 
   @CreateDateColumn()

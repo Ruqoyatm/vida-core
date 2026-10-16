@@ -6,49 +6,34 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import { RequirePermission } from '../auth/permissions.decorator.js';
 import { PatientsService } from './patients.service.js';
-import { PatientSex } from './patient-sex.enum.js';
-import { PayerType } from './payer-type.enum.js';
-import { MaritalStatus } from './marital-status.enum.js';
+import { CreatePatientDto } from './create-patient.dto.js';
 
 @Controller('patients')
-@UseGuards(JwtAuthGuard)
 export class PatientsController {
   constructor(private patientsService: PatientsService) {}
 
+  @RequirePermission('edit_patient')
   @Post()
-  create(
-    @Body()
-    body: {
-      surname: string;
-      firstName: string;
-      otherNames?: string;
-      dateOfBirth: Date;
-      sex: PatientSex;
-      maritalStatus?: MaritalStatus;
-      phone: string;
-      address?: string;
-      nextOfKinName?: string;
-      nextOfKinPhone?: string;
-      payerType?: PayerType;
-      payerScheme?: string;
-      payerRef?: string;
-      coverExpiry?: Date;
-    },
-  ) {
+  create(@Body() body: CreatePatientDto) {
     return this.patientsService.create(body);
   }
 
+  @RequirePermission('view_patient')
   @Get()
   search(@Query('q') q: string) {
     return this.patientsService.search(q);
   }
 
+  @RequirePermission('edit_patient')
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: { knownAllergies?: string }) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() body: { knownAllergies?: string },
+  ) {
     return this.patientsService.update(id, body);
   }
 }

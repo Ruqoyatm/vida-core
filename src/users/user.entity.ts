@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRole } from './user-role.enum.js';
 
 @Entity('users')
 export class User {
@@ -24,13 +23,8 @@ export class User {
   @Column()
   fullName: string;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-    array: true,
-    default: [UserRole.RECEPTIONIST],
-  })
-  roles: UserRole[];
+  @Column({ type: 'varchar', array: true, default: ['receptionist'] })
+  roles: string[];
 
   @Column({ type: 'varchar', nullable: true })
   department: string | null;

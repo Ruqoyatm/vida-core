@@ -146,6 +146,13 @@ Content-Type: application/json
   "password": "lawal"
 }
 
+###Login
+# @name login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "identifier": "kabir@rogue.com", "password": "secret123" }
+
 ### Register a patient
 POST http://localhost:3000/patients
 Content-Type: application/json
@@ -236,4 +243,205 @@ Content-Type: application/json
   "historyOfPresentingComplaint": "Headache for four days, worse in the mornings. No visual disturbance.",
   "pastMedicalHistory": "Hypertension, diagnosed 2023. No known surgeries.",
   "examinationFindings": "Alert and oriented. Chest clear. BP elevated on repeat."
+}
+
+### Check in
+POST http://localhost:3000/encounters
+Content-Type: application/json
+
+{
+  "hospitalNo": "VC-000006",
+  "department": "gopd",
+  "presentingComplaint": "Headache",
+  "priority": "routine"
+}
+
+### Clinical summary
+GET http://localhost:3000/clinical/summary?department=gopd
+
+###  Login as the doctor
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "kabir@rogue.com",
+  "password": "secret123"
+}
+
+### Today's GOPD queue, to get an encounter id
+GET http://localhost:3000/encounters/today?department=gopd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDcyZjE0ZS1hYTY2LTQxMmItODJkNC1jNjdmMmI2ZjFiYzIiLCJlbWFpbCI6ImthYmlyQHJvZ3VlLmNvbSIsInJvbGVzIjpbImRvY3RvciJdLCJkZXBhcnRtZW50IjpudWxsLCJpYXQiOjE3OTEzOTcyNjMsImV4cCI6MTc5MTM5ODE2M30.-zK7cIZMlwoG8jOti8cL-6alkkd74VhrJOy6IDhOnAo; Max-Age=900; Path=/; Expires=Wed, 07 Oct 2026 18:36:03 GMT; HttpOnly; SameSite=Lax
+
+###  Add the primary diagnosis
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/diagnoses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDcyZjE0ZS1hYTY2LTQxMmItODJkNC1jNjdmMmI2ZjFiYzIiLCJlbWFpbCI6ImthYmlyQHJvZ3VlLmNvbSIsInJvbGVzIjpbImRvY3RvciJdLCJkZXBhcnRtZW50IjpudWxsLCJpYXQiOjE3OTEzOTcyNjMsImV4cCI6MTc5MTM5ODE2M30.-zK7cIZMlwoG8jOti8cL-6alkkd74VhrJOy6IDhOnAo; Max-Age=900; Path=/; Expires=Wed, 07 Oct 2026 18:36:03 GMT; HttpOnly; SameSite=Lax
+Content-Type: application/json
+
+{
+  "description": "Malaria",
+  "type": "primary"
+}
+
+### Add a secondary one
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/diagnoses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDcyZjE0ZS1hYTY2LTQxMmItODJkNC1jNjdmMmI2ZjFiYzIiLCJlbWFpbCI6ImthYmlyQHJvZ3VlLmNvbSIsInJvbGVzIjpbImRvY3RvciJdLCJkZXBhcnRtZW50IjpudWxsLCJpYXQiOjE3OTEzOTcyNjMsImV4cCI6MTc5MTM5ODE2M30.-zK7cIZMlwoG8jOti8cL-6alkkd74VhrJOy6IDhOnAo; Max-Age=900; Path=/; Expires=Wed, 07 Oct 2026 18:36:03 GMT; HttpOnly; SameSite=Lax
+Content-Type: application/json
+
+{
+  "description": "Hypertension",
+  "type": "secondary"
+}
+
+### List them
+GET http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/diagnoses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNDcyZjE0ZS1hYTY2LTQxMmItODJkNC1jNjdmMmI2ZjFiYzIiLCJlbWFpbCI6ImthYmlyQHJvZ3VlLmNvbSIsInJvbGVzIjpbImRvY3RvciJdLCJkZXBhcnRtZW50IjpudWxsLCJpYXQiOjE3OTEzOTcyNjMsImV4cCI6MTc5MTM5ODE2M30.-zK7cIZMlwoG8jOti8cL-6alkkd74VhrJOy6IDhOnAo; Max-Age=900; Path=/; Expires=Wed, 07 Oct 2026 18:36:03 GMT; HttpOnly; SameSite=Lax
+
+### patient search
+GET http://localhost:3000/patients?q=muh
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsIn
+
+###
+GET http://localhost:3000/patients?q=muh
+
+###
+GET http://localhost:3000/orders/8bec0e8a-f54c-4088-a2c0-cd40fb732594
+
+###
+GET  http://localhost:3000/services
+
+###
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/orders
+Content-Type: application/json
+
+{"items":[{"serviceId":"34b65c1d-f498-4fd8-99d1-70795d167cf9","urgency":"routine"}]}
+
+###
+GET http://localhost:3000/orders?type=lab
+
+###
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/prescriptions
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "<amoxicillin id>",
+      "dose": "1 capsule",
+      "route": "oral",
+      "frequency": "8 hourly",
+      "duration": "5 days",
+      "quantity": 15
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/prescriptions
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "<paracetamol id>",
+      "dose": "2 tablets",
+      "route": "oral",
+      "frequency": "8 hourly",
+      "duration": "5 days",
+      "quantity": 30
+    }
+  ]
+}
+
+### block the allergic drug
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/prescriptions
+Content-Type: application/json
+
+{"items":[{"productId":"d5ea8248-bd2c-4eb4-a604-b08c0f0411f0","dose":"1 dose","route":"oral","frequency":"8 hourly","duration":"5 days","quantity":15}]}
+### the safe one
+POST http://localhost:3000/encounters/ca26ceeb-ac61-49dd-8b60-19fc825ad8f0/prescriptions
+Content-Type: application/json
+
+{"items":[{"productId":"33459cbd-ad60-4ee6-a44b-2d55992cf4fc","dose":"1 dose","route":"oral","frequency":"8 hourly","duration":"5 days","quantity":15}]}
+
+###
+GET http://localhost:3000/users
+
+###
+GET http://localhost:3000/audit
+
+###
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "kabir@rogue.com",
+  "password": "secret123"
+}
+
+###
+GET http://localhost:3000/roles
+
+### 1. logout first so no cookie is lying around
+POST http://localhost:3000/auth/logout
+
+### 2. guarded route with no cookie, should be 401
+GET http://localhost:3000/patients?q=muh
+
+### 3. login, should be 200
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "kabir@rogue.com",
+  "password": "secret123"
+}
+
+### 4. same guarded route, now should be 200
+GET http://localhost:3000/patients?q=muh
+
+### 403
+GET http://localhost:3000/users
+
+### 403
+GET http://localhost:3000/prescriptions
+
+### 200
+GET http://localhost:3000/patients?q=muh
+
+### 200
+GET http://localhost:3000/encounters/today
+
+###
+GET http://localhost:3000/admin/summary
+
+### should be 400 now, not 500
+GET http://localhost:3000/patients/not-a-uuid
+
+### should be 400, "There is no role called docter"
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "fullName": "Test Person",
+  "staffNumber": "EMP999",
+  "email": "test@vidacore.test",
+  "roles": ["docter"],
+  "department": "gopd",
+  "temporaryPassword": "Vida@12345"
+}
+
+### should show the role change, no passwordHash anywhere
+GET http://localhost:3000/audit
+
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "fullName": "Test Person",
+  "staffNumber": "EMP999",
+  "email": "test@vidacore.test",
+  "roles": ["docter"],
+  "department": "gopd",
+  "temporaryPassword": "Vida@12345"
 }
