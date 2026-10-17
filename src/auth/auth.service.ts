@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   UnauthorizedException,
   ConflictException,
@@ -92,5 +93,32 @@ export class AuthService {
       department: user.department,
       mustChangePassword: user.mustChangePassword,
     };
+  }  async setPassword(userId: string, password: string) {
+    if (!password || password.length < 10) {
+      throw new BadRequestException('Password must be at least 10 characters');
+    }
+
+    const user = await this.usersService.findById(userId);
+
+    if (!user || !user.isActive) {
+      throw new UnauthorizedException('Account is no longer active');
+    }
+
+    const sameAsBefore = await argon2.verify(user.passwordHash, password);
+
+    if (sameAsBefore) {
+      throw new BadRequestException('Choose a password you have not used before');
+    }
+
+    user.passwordHash = await argon2.hash(password);
+    user.mustChangePassword = false;
+    user.failedLoginAttempts = 0;
+    user.lockedUntil = null;
+
+    await this.usersService.save(user);
+
+    return { ok: true };
   }
+
+
 }

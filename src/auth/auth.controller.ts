@@ -40,6 +40,14 @@ export class AuthController {
     return { ok: true };
   }
 
+    @Post('set-password')
+  setPassword(
+    @Req() req: AuthenticatedRequest,
+    @Body() body: { password: string },
+  ) {
+    return this.authService.setPassword(req.user.sub, body.password);
+  }
+
   @Get('me')
   me(@Req() req: AuthenticatedRequest) {
     return this.authService.getProfile(req.user.sub);
